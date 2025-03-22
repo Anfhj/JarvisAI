@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #conversation {
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+            height: 300px;
+            overflow-y: auto;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Jarvis AI</h1>
+    <button onclick="startListening()">Start Listening</button>
+    <div id="conversation"></div>
+
+    <script>
+        function startListening() {
+            let convo = document.getElementById("conversation");
+            convo.innerHTML += `<p><em>Listening...</em></p>`;
+
+            fetch('/start-listening')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.user) {
+                        convo.innerHTML += `<p><strong>You:</strong> ${data.user}</p>`;
+                        convo.innerHTML += `<p><strong>Jarvis:</strong> ${data.response}</p>`;
+                        convo.scrollTop = convo.scrollHeight;
+                    } else {
+                        convo.innerHTML += `<p><strong>Jarvis:</strong> I didn't hear a command.</p>`;
+                    }
+                })
+                .catch(error => {
+                    convo.innerHTML += `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+                });
+        }
+    </script>
+
+</body>
+</html>
